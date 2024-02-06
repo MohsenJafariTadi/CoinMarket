@@ -27,9 +27,13 @@ class Repository(private var apiService: ApiService) {
 
         try {
             val result = call.execute()
+
             if (result.isSuccessful) {
+
                 emit(ResourceModel.Success(result.body()))
+
             } else {
+
                 emit(ResourceModel.Error(result.message()))
             }
         } catch (e: HttpException) {

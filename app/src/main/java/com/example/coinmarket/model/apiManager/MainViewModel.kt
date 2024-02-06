@@ -25,6 +25,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     fun  getCoinRep() {
         viewModelScope.launch(Dispatchers.IO) {
+            _listCoins.emit(ResourceModel.Loading())
             repository.getCoinList().collect {
                 _listCoins.emit(it)
             }
@@ -32,6 +33,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     }
     fun  getNewsRep(){
         viewModelScope.launch(Dispatchers.IO) {
+            _listCoins.emit(ResourceModel.Loading())
             repository.getNewsList().collect {
                 _listNews.emit(it)
             }

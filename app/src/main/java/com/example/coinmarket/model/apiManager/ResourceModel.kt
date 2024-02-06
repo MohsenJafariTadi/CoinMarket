@@ -9,4 +9,5 @@ sealed class ResourceModel<T>(
     class Error<T>(message: String?):ResourceModel<T>(message=message)
 
     class Loading<T> : ResourceModel<T>()
+    class None<T> : ResourceModel<T>()
 }

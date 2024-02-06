@@ -13,9 +13,9 @@ import com.example.coinmarket.model.apiManager.BASE_URL_IMAGE
 import com.example.coinmarket.model.CoinsData
 import com.example.coinmarket.databinding.ItemRecyclerMarketBinding
 
-class  MarketAdapter(
+class MarketAdapter(
     private val data: List<CoinsData.Data>,
-    private val recyclerCallback: RecyclerCallback
+    private val recyclerCallback: RecyclerCallback,
 ) : RecyclerView.Adapter<MarketAdapter.MarketViewHolder>() {
 
     lateinit var binding: ItemRecyclerMarketBinding
@@ -63,8 +63,11 @@ class  MarketAdapter(
             val marketCap = dataCoin.rAW?.uSD?.mKTCAP?.div(1000000000)
 
             val indexDot = marketCap.toString().indexOf('.')
-            binding.txtMarketCap.text =
-                "$" + dataCoin.rAW?.uSD?.mKTCAP.toString().substring(0, indexDot + 3) + "B "
+            try {
+                binding.txtMarketCap.text =
+                    "$" + dataCoin.rAW?.uSD?.mKTCAP.toString().substring(0, indexDot + 3) + "B "
+            } catch (e: Exception) { }
+
             Glide
                 .with(itemView)
                 .load(BASE_URL_IMAGE + dataCoin.coinInfo.imageUrl)

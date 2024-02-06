@@ -57,6 +57,8 @@ class MarketActivity : AppCompatActivity(), MarketAdapter.RecyclerCallback {
     fun refresh() {
         viewModel.getNewsRep()
         viewModel.getCoinRep()
+        binding.determinateBar.isVisible = true
+
     }
 
     private fun init() {
@@ -69,30 +71,31 @@ class MarketActivity : AppCompatActivity(), MarketAdapter.RecyclerCallback {
             viewModel.listNewsStateFlow.collect {
                 when (it) {
                     is ResourceModel.Error -> {
-                        binding.layoutWatchlist.determinateBar.isVisible = false
+                        binding.determinateBar.visibility = View.GONE
                         Toast.makeText(applicationContext,
                             "Error ${it.message}",
                             Toast.LENGTH_SHORT).show();
-                        binding.mainLayout.isVisible = false
-                        binding.layoutTry.isVisible = true
+                        binding.mainLayout.visibility = View.GONE
+                        binding.layoutTry.visibility = View.VISIBLE
 
-
+                        btnTry()
                     }
                     is ResourceModel.Loading -> {
-                        binding.layoutWatchlist.determinateBar.isVisible = true
-                        binding.layoutTry.isVisible = false
+
+                        binding.determinateBar.visibility = View.VISIBLE
+
+                        binding.layoutTry.visibility = View.GONE
                     }
                     is ResourceModel.Success -> {
-
-                        binding.layoutWatchlist.determinateBar.isVisible = false
+                        binding.determinateBar.visibility = View.GONE
                         binding.layoutNews.txtNews.text = it.data?.data?.random()?.title.toString()
-                        binding.mainLayout.isVisible = true
-                        binding.layoutTry.isVisible = false
+                        binding.mainLayout.visibility = View.VISIBLE
+                        binding.layoutTry.visibility = View.GONE
                     }
+                    is ResourceModel.None -> Unit
                 }
             }
         }
-
 
         viewModel.getNewsRep()
     }
@@ -103,28 +106,31 @@ class MarketActivity : AppCompatActivity(), MarketAdapter.RecyclerCallback {
                 when (it) {
                     is ResourceModel.Error -> {
                         Log.e("gorgali2", it.data.toString())
-                        binding.layoutWatchlist.determinateBar.isVisible = false
+                        binding.determinateBar.visibility = View.GONE
+
+
                         Toast.makeText(applicationContext,
                             "Error ${it.message}",
                             Toast.LENGTH_SHORT).show();
-
                         binding.mainLayout.visibility = View.GONE
                         binding.layoutTry.visibility = View.VISIBLE
 
-                         btnTry()
+                        btnTry()
 
                     }
                     is ResourceModel.Loading -> {
-                        binding.layoutWatchlist.determinateBar.isVisible = true
-
+//                        Log.v("lashii", it.message.toString())
+                        binding.determinateBar.visibility = View.VISIBLE
+                        binding.layoutTry.visibility = View.GONE
                     }
                     is ResourceModel.Success -> {
                         Log.e("gorgali1", it.data.toString())
-                        binding.layoutWatchlist.determinateBar.isVisible = false
+                        binding.determinateBar.visibility = View.GONE
                         showDataInRecycler(it.data!!.data)
-                        binding.mainLayout.isVisible = true
-                        binding.layoutTry.isVisible = false
+                        binding.mainLayout.visibility = View.VISIBLE
+                        binding.layoutTry.visibility = View.GONE
                     }
+                    is ResourceModel.None -> Unit
                 }
             }
         }
@@ -132,12 +138,13 @@ class MarketActivity : AppCompatActivity(), MarketAdapter.RecyclerCallback {
         viewModel.getCoinRep()
     }
 
-    fun btnTry(){
+    fun btnTry() {
         binding.imgRef.setOnClickListener {
-            getNewsFromApi()
-            getTopCoinsFromApi()
+            viewModel.getNewsRep()
+            viewModel.getCoinRep()
         }
     }
+
     private fun showDataInRecycler(data: List<CoinsData.Data>) {
         val marketAdapter = MarketAdapter(data, this)
         binding.layoutWatchlist.recyclerMain.adapter = marketAdapter

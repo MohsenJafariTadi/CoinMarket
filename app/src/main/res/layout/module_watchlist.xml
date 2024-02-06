@@ -25,17 +25,7 @@
         tools:itemCount="3"
         tools:listitem="@layout/item_recycler_market" />
 
-    <ProgressBar
-        android:id="@+id/determinateBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
 
-        app:layout_anchorGravity="bottom|center"
-        app:layout_constraintBottom_toTopOf="@+id/viewMain"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerMain"
-        app:layout_constraintStart_toStartOf="@+id/recyclerMain"
-        app:layout_constraintTop_toTopOf="@+id/recyclerMain" />
 
     <View
         android:layout_marginTop="16dp"
